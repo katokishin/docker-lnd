@@ -11,8 +11,8 @@ RUN apk --no-cache --virtual build-dependencies add \
 WORKDIR $GOPATH/src/github.com/lightningnetwork/lnd
 RUN git config --global user.email "tkp@kirkdesigns.co.uk" \
   && git config --global user.name "Tom Kirkpatrick" \
-  && git clone https://github.com/lightningnetwork/lnd . \
-  && git reset --hard v0.9.0-beta \
+  && git clone https://github.com/LN-Zap/lnd . \
+  && git reset --hard v0.9.0-beta-2-gba4483f6 \
   && make \
   && make install tags="experimental monitoring autopilotrpc chainrpc invoicesrpc routerrpc signrpc walletrpc watchtowerrpc wtclientrpc" \
   && cp /go/bin/lncli /bin/ \
