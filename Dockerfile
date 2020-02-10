@@ -36,6 +36,7 @@ MAINTAINER Tom Kirkpatrick <tkp@kirkdesigns.co.uk>
 RUN apk --no-cache add \
   bash \
   curl \
+  vim \
   su-exec \
   dropbear-dbclient \
   dropbear-scp \
