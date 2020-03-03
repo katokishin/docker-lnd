@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Do nothing if the PASSWORD var is not set.
+if [ -z "$PASSWORD" ]; then
+  echo "[lnd_unlock] Please set PASSWORD in order to unlock wallet automatically."
+  exit 1
+fi
+
+# Do nothing if the RESTPORT var is not set.
+if [ -z "$RESTPORT" ]; then
+  echo "[lnd_unlock] Please set RESTPORT in order to unlock wallet automatically."
+  exit 1
+fi
+
+# output script content for easier debugging.
+# set -x
+
+# exit from script if error was raised.
+set -e
+
+# return is used within bash function in order to return the value.
+return() {
+  echo "$1"
+}
+
+# set_default function gives the ability to move the setting of default
+# env variable from docker file to the script thereby giving the ability to the
+# user override it durin container start.
+set_default() {
+  # docker initialized env variables with blank string and we can't just
+  # use -z flag as usually.
+  BLANK_STRING='""'
+
+  VARIABLE="$1"
+  DEFAULT="$2"
+
+  if [[ -z "$VARIABLE" || "$VARIABLE" == "$BLANK_STRING" ]]; then
+    if [ -z "$DEFAULT" ]; then
+      error "You should specify default variable"
+    else
+      VARIABLE="$DEFAULT"
+    fi
+  fi
+ return "$VARIABLE"
+}
+
+# Set default variables if needed.
+NETWORK=$(set_default "$NETWORK" "testnet")
+CHAIN=$(set_default "$CHAIN" "bitcoin")
+LND_DIR=$(set_default "$LND_DIR" "$HOME/.lnd")
+
+# Wait for rest service listening.
+echo "[lnd_unlock] Waiting for lnd rest service on port $RESTPORT..."
+until (
+  netstat -lnp | grep $RESTPORT
+)
+do
+  echo "[lnd_unlock] Waiting for lnd rest service on port $RESTPORT..."
+  sleep 1
+done
+
+echo "[lnd_unlock] Unlocking wallet..."
+
+BASE64=`echo -n "$PASSWORD"|base64 | tr -d '\n\r'`
+MACAROON_HEADER="Grpc-Metadata-macaroon:$(xxd -ps -u -c 1000 "$LND_DIR/data/chain/$CHAIN/$NETWORK/admin.macaroon")"
+
+curl \
+  --silent \
+  --output /dev/null \
+  --show-error \
+  -X POST \
+  --cacert "$LND_DIR/tls.cert" \
+  --header $MACAROON_HEADER \
+  -d '{ "wallet_password": "'$BASE64'" }' \
+  https://localhost:$RESTPORT/v1/unlockwallet

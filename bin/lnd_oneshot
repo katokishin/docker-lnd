@@ -5,15 +5,21 @@ set -ex
 # Generate lnd.conf
 lnd_init
 
-PARAMS=""
-if [ ! -z "${RPCUSER}"]; then
-   PARAMS=$(echo --rpcuser=${RPCUSER})
-fi
-if [ ! -z "${RPCPASS}"]; then
-   PARAMS=$(echo --rpcpass=${RPCPASS})
+# Start wallet unlocker
+unlock &&
+
+# Set chain and network from env vars if set.
+if [ -n "${CHAIN}" ]; then
+   PARAMS="$PARAMS --${CHAIN}.active"
+
+   if [ -n "${NETWORK}" ]; then
+      PARAMS="$PARAMS --${CHAIN}.${NETWORK}"
+   fi
 fi
 
 # Add user parameters to command.
 PARAMS="$PARAMS $@"
 
+# Print command and start lnd node.
+echo "Command: lnd $PARAMS"
 exec lnd $PARAMS
