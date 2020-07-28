@@ -17,10 +17,10 @@ RUN git config --global user.email "tkp@kirkdesigns.co.uk" \
   && git fetch lnzap \
   && git cherry-pick a7eb1085f2fef37f26e118291d5521cd1b247571 \
   && git cherry-pick b95a0a0f1e22d39748449f7d47bf75be106b9b4d \
-  && make \
+  && make tags="experimental monitoring autopilotrpc chainrpc invoicesrpc routerrpc signrpc walletrpc watchtowerrpc wtclientrpc" \
   && make install tags="experimental monitoring autopilotrpc chainrpc invoicesrpc routerrpc signrpc walletrpc watchtowerrpc wtclientrpc" \
-  && cp /go/bin/lncli /bin/ \
-  && cp /go/bin/lnd /bin/
+  && cp lncli-debug /bin/ \
+  && cp lnd-debug /bin/
 
 # Grab and install the latest version of lndconnect.
 WORKDIR $GOPATH/src/github.com/LN-Zap/lndconnect
@@ -59,8 +59,8 @@ RUN addgroup -g ${GROUP_ID} -S lnd && \
   adduser -u ${USER_ID} -S lnd -G lnd -s /bin/bash -h /lnd lnd
 
 # Copy the compiled binaries from the builder image.
-COPY --from=builder /go/bin/lncli /bin/
-COPY --from=builder /go/bin/lnd /bin/
+COPY --from=builder /bin/lncli-debug /bin/lncli
+COPY --from=builder /bin/lnd-debug /bin/lnd
 COPY --from=builder /go/bin/lndconnect /bin/
 
 ## Set BUILD_VER build arg to break the cache here.
