@@ -1,6 +1,6 @@
 # lnd for Docker
 
-Docker image that runs lnd in a container for easy deployment.
+Docker image that runs lnd in a container for easy deployment. Modified some parameters to run on mainnet.
 
 The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) daemon and [lndconnect](https://github.com/LN-Zap/lndconnect).
 
@@ -9,17 +9,17 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
 1.  Create a `lnd-data` volume to persist the lnd data, should exit immediately. The `lnd-data` container will store the lnd data when the node container is recreated (software upgrade, reboot, etc):
 
         docker volume create --name=lnd-data
-        docker run -v lnd-data:/lnd --name=lnd-node -d \
+        docker run -v ~/lnd-data:/lnd --name=lnd-node -d \
             -p 9735:9735 \
             -p 10009:10009 \
             lnzap/lnd:latest \
             --bitcoin.active \
-            --bitcoin.testnet \
+            --bitcoin.mainnet \
             --debuglevel=info \
             --bitcoin.node=neutrino \
-            --neutrino.connect=testnet1-btcd.zaphq.io \
-            --neutrino.connect=testnet2-btcd.zaphq.io \
-            --autopilot.active \
+            --neutrino.connect=mainnet1-btcd.zaphq.io \
+            --neutrino.connect=mainnet2-btcd.zaphq.io \
+            --neutrino.connect=btcd-mainnet.lightning.computer \
             --rpclisten=0.0.0.0:10009
 
 2.  Verify that the container is running and lnd node is downloading the blockchain
