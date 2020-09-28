@@ -34,6 +34,11 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
 
 4.  Install optional init scripts for upstart and systemd are in the `init` directory.
 
+5.  You must set up a wallet in order to generate macaroons.
+
+        docker exec -u lnd -it lnd-node lncli create
+
+
 ## Documentation
 
 - Additional documentation in the [docs folder](docs).
