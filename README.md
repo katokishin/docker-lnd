@@ -38,6 +38,32 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
 
         docker exec -u lnd -it lnd-node lncli create
 
+6.  You will likely need to add these settings to lnd.conf, delete tls.cert and tls.key files, and restart lnd to regenerate them:
+
+        tlsextraip=IPADDRESS
+        externalip=IPADDRESS
+        
+        # Other settings are optional, refer to [these](https://github.com/alexbosworth/run-lnd) instructions for an example
+        # [This](https://github.com/lightningnetwork/lnd/blob/master/sample-lnd.conf) is also an exhaustive exmaple
+        
+7.  I find that the easiest way to set up a gRPC connection to this node from other devices is to use lndconnect.
+
+        # In a temporary location, download lndconnect and install
+        wget https://github.com/LN-Zap/lndconnect/releases/download/v0.2.0/lndconnect-linux-386-v0.2.0.tar.gz
+        sudo tar -xvf lndconnect-linux-386-v0.2.0.tar.gz --strip=1 -C /usr/local/bin
+        # Display help to make sure it works
+        lndconnect -h
+        # Issue an lndconnect URI
+        lndconnect --lnddir=/home/<username>/lnd-data/.lnd --host=<IPADDRESS> -j
+        # If using EC2 following [these](https://github.com/alexbosworth/run-lnd) instructions:
+        lndconnect --host=<EC2_IPADDRESS> -j
+        # If you want a scannable QR code in your terminal, omit the -j parameter
+        lndconnect --lnddir=/home/<username>/lnd-data/.lnd --host=<IPADDRESS>
+
+8.  If still having trouble connecting, make sure firewall settings allow port 9735 & 10009.
+
+9.  Use a library like [node-lnd-grpc](https://github.com/LN-Zap/node-lnd-grpc/) or [ln-service](https://github.com/alexbosworth/ln-service), connect with lndconnectUri or its cert and macaroon params and get started!
+
 
 ## Documentation
 
