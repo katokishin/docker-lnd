@@ -64,6 +64,29 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
 
 9.  Use a library like [node-lnd-grpc](https://github.com/LN-Zap/node-lnd-grpc/) or [ln-service](https://github.com/alexbosworth/ln-service), connect with lndconnectUri or its cert and macaroon params and get started!
 
+## Requesting a Bitrefill Thor channel
+
+An easy way to set up a channel with inbound liquidity is to use [Bitrefill's Thor service](https://www.bitrefill.com/thor-lightning-network-channels/?hl=en).
+
+In order to do so, you will need to enter the docker container created above and use the command line (bash) like so:
+
+        sudo docker exec -it lnd-node bash
+
+When opening a channel with the Bitrefill Thor service, you are given a long command ("LND Channel") in the website that looks like this:
+
+        lncli connect <Bitrefill's LND Node Pubkey>@<Bitrefill's IP>:9735 >/dev/null 2>&1; lncli getinfo|grep '"identity_pubkey"'|sed -e 's/.*://;s/[^0-9a-f]//g'|tr -d '\n'| curl -G --data-urlencode remoteid@- "https://api.bitrefill.com/v1/thor?k1=d8826be4a667ddb43745c3107006d7a17fffb374e8cec2262309ba363d399569&private=0"
+        
+However, this may not work out of the box with our setup. This is due to the root directory being named `/lnd` rather than `/root`.
+
+Therefore, we must run the command adding two critical options to each lncli call. (I have split the call into its two parts for visibility. You can execute them this way too)
+
+        lncli --tlscertpath /lnd/.lnd/tls.cert --macaroonpath /lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon connect 030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f@52.50.244.44:9735
+        
+        lncli --tlscertpath /lnd/.lnd/tls.cert --macaroonpath /lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon getinfo|grep '"identity_pubkey"'|sed -e 's/.*://;s/[^0-9a-f]//g'|tr -d '\n'| curl -G --data-urlencode remoteid@- "https://api.bitrefill.com/v1/thor?k1=d8826be4a667ddb43745c3107006d7a17fffb374e8cec2262309ba363d399569&private=0"
+
+This should return a JSON string stating `{"status":"OK"}` if successful. I hope that works!
+
+Exit the docker container by typing `exit`, or continue to fool around with lncli (remembering to add the --tlscerpath and --macaroonpath parameters!).
 
 ## Documentation
 
