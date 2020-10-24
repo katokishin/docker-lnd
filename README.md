@@ -17,9 +17,8 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
             --bitcoin.mainnet \
             --debuglevel=info \
             --bitcoin.node=neutrino \
-            --neutrino.connect=mainnet1-btcd.zaphq.io \
-            --neutrino.connect=mainnet2-btcd.zaphq.io \
             --neutrino.connect=btcd-mainnet.lightning.computer \
+            --neutrino.connect=bb1.breez.technology \
             --rpclisten=0.0.0.0:10009
 
 2.  Verify that the container is running and lnd node is downloading the blockchain
@@ -80,13 +79,17 @@ However, this may not work out of the box with our setup. This is due to the roo
 
 Therefore, we must run the command adding two critical options to each lncli call. (I have split the call into its two parts for visibility. You can execute them this way too)
 
-        lncli --tlscertpath /lnd/.lnd/tls.cert --macaroonpath /lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon connect 030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f@52.50.244.44:9735
+        lncli --tlscertpath /lnd/.lnd/tls.cert --adminmacaroonpath /lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon connect 030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f@52.50.244.44:9735
         
-        lncli --tlscertpath /lnd/.lnd/tls.cert --macaroonpath /lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon getinfo|grep '"identity_pubkey"'|sed -e 's/.*://;s/[^0-9a-f]//g'|tr -d '\n'| curl -G --data-urlencode remoteid@- "https://api.bitrefill.com/v1/thor?k1=d8826be4a667ddb43745c3107006d7a17fffb374e8cec2262309ba363d399569&private=0"
+        lncli --tlscertpath /lnd/.lnd/tls.cert --adminmacaroonpath /lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon getinfo|grep '"identity_pubkey"'|sed -e 's/.*://;s/[^0-9a-f]//g'|tr -d '\n'| curl -G --data-urlencode remoteid@- "https://api.bitrefill.com/v1/thor?k1=d8826be4a667ddb43745c3107006d7a17fffb374e8cec2262309ba363d399569&private=0"
 
 This should return a JSON string stating `{"status":"OK"}` if successful. I hope that works!
 
 Exit the docker container by typing `exit`, or continue to fool around with lncli (remembering to add the --tlscerpath and --macaroonpath parameters!).
+
+## Running your own btcd
+
+Relying on altruistic third party btcd nodes for your neutrino node is not da wae. Check out Zap's repository [LN-Zap/docker-btcd](https://github.com/LN-Zap/docker-btcd) for a quick and simple way to run a local btcd node.
 
 ## Documentation
 
