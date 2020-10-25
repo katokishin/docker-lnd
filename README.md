@@ -17,6 +17,7 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
             --bitcoin.mainnet \
             --debuglevel=info \
             --bitcoin.node=neutrino \
+            
             --neutrino.connect=btcd-mainnet.lightning.computer \
             --neutrino.connect=bb1.breez.technology \
             --rpclisten=0.0.0.0:10009
