@@ -21,6 +21,8 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
             --neutrino.connect=btcd-mainnet.lightning.computer \
             --neutrino.connect=bb1.breez.technology \
             --rpclisten=0.0.0.0:10009
+            
+Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/lnd:0.11.1-beta` as listed in [LNZap's dockerHub page](https://hub.docker.com/r/lnzap/lnd/tags).
 
 2.  Verify that the container is running and lnd node is downloading the blockchain
 
