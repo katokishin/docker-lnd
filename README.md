@@ -86,6 +86,18 @@ This should return a JSON string stating `{"status":"OK"}` if successful. I hope
 
 Relying on altruistic third party btcd nodes for your neutrino node is not da wae. Check out Zap's repository [LN-Zap/docker-btcd](https://github.com/LN-Zap/docker-btcd) for a quick and simple way to run a local btcd node.
 
+## Troubleshooting
+
+I have had lnd basically stop responding due to 'too many open files'. 
+
+        Error opening file /lnd/.lnd/data/chain/bitcoin/mainnet/peers.json: open /lnd/.lnd/data/chain/bitcoin/mainnet/peers.json: too many open files
+        
+This causes enormous headaches as it seems to increase routing fails and prevents new grpc connections. A temporary solution short of simply restarting the container is the following:
+
+See how many simultaneous open files the system supports with `ulimit -n`. This often defaults to 1024.
+
+`sudo vi /etc/security/limits.conf` and add rows `* soft nofiles 65536` and `* hard nofiles 65536`, save, log out and back in. Check `ulimit -n` to see that it is now 65536. 
+
 ## Documentation
 
 - Additional documentation in the [docs folder](docs).
