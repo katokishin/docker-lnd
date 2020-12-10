@@ -24,6 +24,16 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
             
 Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/lnd:0.11.1-beta` as listed in [LNZap's dockerHub page](https://hub.docker.com/r/lnzap/lnd/tags).
 
+1.1  Some additional settings that may be of interest:
+
+        --accept-keysend=false \
+        --alias=Paddle \
+        --color=#9fbed0 \
+        --allow-circular-route=false \
+        --autopilot.active=true \
+        --autopilot.allocation=0.5 \
+        --autopilot.private=true \
+
 2.  Verify that the container is running and lnd node is downloading the blockchain
 
         $ docker ps
