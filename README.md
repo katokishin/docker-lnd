@@ -17,7 +17,7 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
             --bitcoin.mainnet \
             --debuglevel=info \
             --bitcoin.node=neutrino \
-            --routing.assumechanvalid=1 \
+            --routing.assumechanvalid \
             --neutrino.connect=btcd-mainnet.lightning.computer \
             --neutrino.connect=bb1.breez.technology \
             --rpclisten=0.0.0.0:10009
@@ -26,13 +26,11 @@ Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/l
 
 1.1  Some additional settings that may be of interest:
 
-        --accept-keysend=false \
         --alias=Paddle \
         --color=#9fbed0 \
-        --allow-circular-route=false \
-        --autopilot.active=true \
+        --autopilot.active \
         --autopilot.allocation=0.5 \
-        --autopilot.private=true \
+        --autopilot.private \
 
 2.  Verify that the container is running and lnd node is downloading the blockchain
 
