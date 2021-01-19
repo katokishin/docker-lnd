@@ -28,6 +28,8 @@ Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/l
 
         --alias=Paddle \
         --color=#9fbed0 \
+        --rejecthtlc \
+        --rejectpush \
         --autopilot.active \
         --autopilot.allocation=0.5 \
         --autopilot.private \
