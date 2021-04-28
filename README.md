@@ -20,9 +20,10 @@ The image contains the latest [lnd](https://github.com/lightningnetwork/lnd) dae
             --routing.assumechanvalid \
             --neutrino.connect=btcd-mainnet.lightning.computer \
             --neutrino.connect=bb1.breez.technology \
+            --neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json \
             --rpclisten=0.0.0.0:10009
             
-Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/lnd:0.11.1-beta` as listed in [LNZap's dockerHub page](https://hub.docker.com/r/lnzap/lnd/tags).
+Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/lnd:0.12.1-beta` as listed in [LNZap's dockerHub page](https://hub.docker.com/r/lnzap/lnd/tags).
 
 1.1  Some additional settings that may be of interest:
 
@@ -30,15 +31,12 @@ Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/l
         --color=#9fbed0 \
         --rejecthtlc \
         --rejectpush \
-        --autopilot.active \
-        --autopilot.allocation=0.5 \
-        --autopilot.private \
 
 2.  Verify that the container is running and lnd node is downloading the blockchain
 
         $ docker ps
         CONTAINER ID        IMAGE                         COMMAND             CREATED             STATUS              PORTS                                              NAMES
-        d0e1076b2dca        lnzap/lnd:latest            "lnd_oneshot"       2 seconds ago       Up 1 seconds        0.0.0.0:9735->9735/tcp, 0.0.0.0:10009->10009/tcp   lnd-node
+        d0e1076b2dca        lnzap/lnd:0.12.1-beta         "lnd_oneshot"       2 seconds ago       Up 1 seconds        0.0.0.0:9735->9735/tcp, 0.0.0.0:10009->10009/tcp   lnd-node
 
 3.  You can then access the daemon's output thanks to the [docker logs command](https://docs.docker.com/reference/commandline/cli/#logs)
 
