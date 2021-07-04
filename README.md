@@ -31,6 +31,7 @@ Instead of `lnzap/lnd:latest`, you can also try specific images such as `lnzap/l
         --color=#9fbed0 \
         --rejecthtlc \
         --rejectpush \
+        
 
 2.  Verify that the container is running and lnd node is downloading the blockchain
 
